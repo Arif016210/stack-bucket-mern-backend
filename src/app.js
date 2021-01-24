@@ -3,9 +3,26 @@ const express = require('express')
 const path = require('path')
 const cors = require('cors')
 const morgan = require('morgan')
+const mongoose = require('mongoose');
 
 
 const app = express()
+
+mongoose.connect('mongodb://localhost:27017/stack-bucket-mern-backend', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+})
+    .then(() => {
+        console.log('Database Connected!!!');
+        app.listen(process.env.PORT, () => {
+            console.log('Server is listening on:', process.env.PORT);
+        })
+    })
+    .catch(e => {
+        console.log(e);
+    })
+
+
 app.use(cors())
 app.use(morgan('dev'))
 app.use(express.static(path.join(__dirname, '../', 'public')))
@@ -40,8 +57,3 @@ app.use((error, req, res, next) => {
 })
 
 
-
-
-app.listen(process.env.PORT, () => {
-    console.log('Server is listening on:', process.env.PORT);
-})
